@@ -18,19 +18,19 @@ export default function Home() {
           <img
             key="1"
             src="/img/neom-yT7En_eUUnI-unsplash.jpg"
-            className="w-full h-fit"
+            className="w-full h-auto object-cover min-h-60"
             loading="lazy"
           />
           <img
             key="2"
             src="/img/neom-z4ELCkNmnz0-unsplash.jpg"
-            className="w-full h-fit"
+            className="w-full h-auto object-cover min-h-60"
             loading="lazy"
           />
           <img
             key="3"
             src="/img/pete-alexopoulos-XyVQW6VcEs8-unsplash.jpg"
-            className="w-full h-fit"
+            className="w-full h-auto object-cover min-h-60"
             loading="lazy"
           />
         </LazyCarousel>
