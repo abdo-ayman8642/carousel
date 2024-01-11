@@ -16,4 +16,6 @@ export interface CarouselProps {
   autoScrollInterval?: number;
   transition?: TransitionConfig;
   showIndicators?: boolean;
+  nextIcon?: React.ReactElement;
+  prevIcon?: React.ReactElement;
 }

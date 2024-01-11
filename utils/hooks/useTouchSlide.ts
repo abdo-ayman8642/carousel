@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface TouchHandlers {
   onTouchStart: React.TouchEventHandler<HTMLDivElement>;
   onTouchMove: React.TouchEventHandler<HTMLDivElement>;
   onTouchEnd: React.TouchEventHandler<HTMLDivElement>;
+  isTouched: boolean;
 }
 
 interface TouchSlideProps {
@@ -18,9 +19,11 @@ const useTouchSlide = ({
   prevSlide,
 }: TouchSlideProps): TouchHandlers => {
   const touchStartX = useRef<number | null>(null);
+  const [isTouched, setIsTouched] = useState(false);
 
   const onTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
     touchStartX.current = e.touches[0].clientX;
+    setIsTouched((prev) => !prev);
   };
 
   const onTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => {
@@ -38,7 +41,7 @@ const useTouchSlide = ({
     touchStartX.current = null;
   };
 
-  return { onTouchStart, onTouchMove, onTouchEnd };
+  return { onTouchStart, onTouchMove, onTouchEnd, isTouched };
 };
 
 export default useTouchSlide;

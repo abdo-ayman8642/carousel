@@ -15,10 +15,12 @@ const Carousel: React.FC<CarouselProps> = ({
     timingFunction: TimingFunction.EASE_IN,
     delay: 0,
   },
+  nextIcon = <ArrowRight />,
+  prevIcon = <ArrowLeft />,
   showIndicators = false,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isMouseOver, handleMouseEnter, handleMouseLeave] = useMouseControl();
+  const [isMouseOver, handleMouseEnter, handleMouseLeave] = useMouseControl(); // to pause slideshow when mouse is over
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
@@ -29,48 +31,47 @@ const Carousel: React.FC<CarouselProps> = ({
       (prevIndex) => (prevIndex - 1 + children.length) % children.length
     );
   };
-  const { onTouchEnd, onTouchMove, onTouchStart } = useTouchSlide({
+  const { onTouchEnd, onTouchMove, onTouchStart, isTouched } = useTouchSlide({
     autoScrollInterval,
     nextSlide,
     prevSlide,
-  });
+  }); // handling any events related to touch
 
   const isKeyPressed = useKeyboardNavigation({
     prevAction: prevSlide,
     nextAction: nextSlide,
-  });
+  }); // just only to know wheter a key is pressed to reset the interval and begin the auto count from beginning
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    console.log("ok");
     const handleAutoScroll = () => {
       if (!isMouseOver && autoScrollInterval > 0) {
+        // if mouse is over then freeze auto scroll
         nextSlide();
       }
     };
 
     if (autoScrollInterval > 0) {
-      intervalId = setInterval(handleAutoScroll, autoScrollInterval * 1000);
+      intervalId = setInterval(handleAutoScroll, autoScrollInterval * 1000); // cause autoscroll value is in sec
     }
 
     return () => clearInterval(intervalId);
-  }, [isMouseOver, autoScrollInterval, isKeyPressed]);
+  }, [isMouseOver, autoScrollInterval, isKeyPressed, isTouched]);
 
   const handleIndicatorClick = (index: number) => {
     setCurrentIndex(index);
-  };
+  }; // on pressing on any one of indicators
 
-  const duration = `duration-${transition.duration}`;
   return (
     <div
-      className="relative"
+      className="relative flex size-2/3 mx-auto"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      <div className="overflow-hidden">
+      <div className="overflow-hidden ">
         <div
           className={`flex `}
           style={{
@@ -87,27 +88,28 @@ const Carousel: React.FC<CarouselProps> = ({
       </div>
 
       <button
-        className={`absolute top-1/2 left-2 transform -translate-y-1/2 text-white p-3 rounded-lg focus:outline-none ${
+        className={`absolute top-1/2 left-1 transform -translate-y-1/2 text-white p-1 rounded-lg focus:outline-none ${
           isMouseOver
             ? "opacity-100 hover:bg-white hover:bg-opacity-20"
             : "opacity-50"
-        }`}
+        } sm:left-1 sm:p-1 sm:rounded-lg md:left-2 md:p-2 md:rounded-lg lg:left-4 lg:p-3 lg:rounded-lg xl:left-8 xl:p-4 xl:rounded-lg`}
         onClick={prevSlide}
         aria-label="Previous Slide"
       >
-        <ArrowLeft />
+        {prevIcon}
       </button>
       <button
-        className={`absolute top-1/2 right-2 transform -translate-y-1/2  text-white p-3 rounded-lg focus:outline-none hover:bg-white ${
+        className={`absolute top-1/2 right-1 transform -translate-y-1/2 text-white p-1 rounded-lg focus:outline-none ${
           isMouseOver
             ? "opacity-100 hover:bg-white hover:bg-opacity-20"
             : "opacity-50"
-        }`}
+        } sm:right-1 sm:p-1 sm:rounded-lg md:right-2 md:p-2 md:rounded-lg lg:right-4 lg:p-3 lg:rounded-lg xl:right-8 xl:p-4 xl:rounded-lg`}
         onClick={nextSlide}
         aria-label="Next Slide"
       >
-        <ArrowRight />
+        {nextIcon}
       </button>
+
       {/* Indicators */}
       {showIndicators && (
         <div
@@ -119,7 +121,9 @@ const Carousel: React.FC<CarouselProps> = ({
               key={index}
               onClick={() => handleIndicatorClick(index)}
               className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                index === currentIndex ? "w-8 bg-white" : "w-4 bg-white/50"
+                index === currentIndex
+                  ? " w-4 sm:w-6 md:w-8 lg:w-12 xl:w-16 bg-white"
+                  : " w-2  sm:w-3 md:w-4 lg:w-6 xl:w-8 bg-white/50"
               }`}
               role="button"
               aria-label={`Go to Slide ${index + 1}`}
