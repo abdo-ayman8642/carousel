@@ -24,9 +24,7 @@ export default function Header() {
           <InfoIcon />
         </span>
       </h1>
-      {showDoc && (
-        <CarouselDialog open={showDoc} onClose={() => setShowDoc(false)} />
-      )}
+      {<CarouselDialog open={showDoc} onClose={() => setShowDoc(false)} />}
     </div>
   );
 }
