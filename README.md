@@ -2,6 +2,8 @@
 
 A simple Carousel Component with extented features & functionality and responsive
 
+Demo: [Rich Carousel Component](https://simple-carousel-nine.vercel.app/)
+
 ## Getting Started
 
 To get started with Awesome App, follow these simple steps:
